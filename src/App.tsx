@@ -7,9 +7,16 @@ import Grid from '@material-ui/core/Grid';
 import AddShoppingCarIcon from '@material-ui/icons/AddShoppingCart';
 import Badge from '@material-ui/core/Badge';
 
-//
+//Styles
+import { Wrapper } from './styles/styles';
+import { CartItem } from './types/types';
+
+const getProducts = async (): Promise<CartItem[]> =>
+  await (await fetch('https://fakestoreapi.com/products')).json();
 
 const App = () => {
+  const { data, isLoading, error } = useQuery<CartItem[]>('products', getProducts);
+  console.log('data', data);
   return (
     <div className="App">
       <h1>App</h1>
