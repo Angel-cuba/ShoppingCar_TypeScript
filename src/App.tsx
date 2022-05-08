@@ -8,27 +8,43 @@ import AddShoppingCarIcon from '@material-ui/icons/AddShoppingCart';
 import Badge from '@material-ui/core/Badge';
 
 //Styles
-import { Wrapper } from './styles/styles';
+import { StyledButton, Wrapper } from './styles/styles';
 import { CartItem } from './types/types';
 import Item from './Item/Item';
+import Cart from './Cart/Cart';
 
 const getProducts = async (): Promise<CartItem[]> =>
   await (await fetch('https://fakestoreapi.com/products')).json();
 
 const App = () => {
-  const [cartOpen, setCartOpen] = useState(false);
+  const [cartOpen, setCartOpen] = useState(true);
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const { data, isLoading, error } = useQuery<CartItem[]>('products', getProducts);
   console.log('data', data);
 
-  const getTotalItems = () => null;
-  const handleAddToCart = (clickedItem: CartItem) => null;
+  const getTotalItems = (items: CartItem[]) =>
+    items.reduce((acc: number, item) => acc + item.quantity, 0);
+  const handleAddToCart = (clickedItem: CartItem) => {
+    setCartItems([...cartItems, clickedItem]);
+  };
   const handleRemoveFromCart = () => null;
 
   if (isLoading) return <LinearProgress />;
   if (error) return <div>Error</div>;
   return (
     <Wrapper>
+      <Drawer anchor="right" open={cartOpen} onClose={() => setCartOpen(false)}>
+        <Cart
+          cartItems={cartItems}
+          addToCart={handleAddToCart}
+          removeFromCart={handleRemoveFromCart}
+        />
+      </Drawer>
+      <StyledButton onClick={() => setCartOpen(true)}>
+        <Badge badgeContent={getTotalItems(cartItems)} color="error">
+          <AddShoppingCarIcon />
+        </Badge>
+      </StyledButton>
       <Grid container spacing={3}>
         {data?.map((item) => (
           <Grid item xs={12} sm={6} md={4} key={item.id}>
@@ -36,14 +52,6 @@ const App = () => {
           </Grid>
         ))}
       </Grid>
-      <Drawer
-        anchor="bottom"
-        open={true}
-        variant="permanent"
-        classes={{
-          paper: 'drawer',
-        }}
-      ></Drawer>
     </Wrapper>
   );
 };
