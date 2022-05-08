@@ -18,7 +18,7 @@ const ItemInCart: React.FC<Props> = ({ item, addToCart, removeFromCart }) => (
       <h2>{item.title}</h2>
       <div className="information">
         <p>Price: £{item.price}</p>
-        <p>Total: £{(item.quantity * item.price).toFixed(2)}</p>
+        <p>Total: £{(item.amount * item.price).toFixed(2)}</p>
       </div>
       <div className="buttons">
         <Button
@@ -29,7 +29,7 @@ const ItemInCart: React.FC<Props> = ({ item, addToCart, removeFromCart }) => (
         >
           -
         </Button>
-        <p>{item.quantity}</p>
+        <p>{item.amount}</p>
         <Button size="small" disableElevation variant="contained" onClick={() => addToCart(item)}>
           +
         </Button>

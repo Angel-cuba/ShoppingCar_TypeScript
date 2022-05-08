@@ -23,9 +23,19 @@ const App = () => {
   console.log('data', data);
 
   const getTotalItems = (items: CartItem[]) =>
-    items.reduce((acc: number, item) => acc + item.quantity, 0);
+    items.reduce((acc: number, item) => acc + item.amount, 0);
   const handleAddToCart = (clickedItem: CartItem) => {
-    setCartItems([...cartItems, clickedItem]);
+    setCartItems((prev) => {
+      //In the item already added to cart?
+      const isItemInCart = prev.find((item) => item.id === clickedItem.id);
+      if (isItemInCart) {
+        return prev.map((item) =>
+          item.id === clickedItem.id ? { ...item, amount: item.amount + 1 } : item
+        );
+      }
+      //First time adding to cart
+      return [...prev, { ...clickedItem, amount: 1 }];
+    });
   };
   const handleRemoveFromCart = () => null;
 
