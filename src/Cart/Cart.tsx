@@ -29,8 +29,8 @@ const Cart: React.FC<Props> = ({ cartItems, addToCart, removeFromCart }) => {
         <ItemInCart
           key={item.id}
           item={item}
-          addToCart={addToCart}
-          removeFromCart={removeFromCart}
+          addToCart={handleAddToCart}
+          removeFromCart={handleRemoveFromCart}
         />
       ))}
       <Button onClick={handleClearCart}>Clear Cart</Button>
